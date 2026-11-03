@@ -1,0 +1,2 @@
+Model,Feature,Accuracy,Precision,Recall,F1,TN,FP,FN,TP,CV_F1
+PhoBERT,Tokenizer/Embedding,1.0,1.0,1.0,1.0,74,0,0,59,1.0

@@ -1,0 +1,27 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 13776.58it/s]
+[transformers] [1mRobertaForSequenceClassification LOAD REPORT[0m from: vinai/phobert-base
+Key                         | Status     | 
+----------------------------+------------+-
+lm_head.bias                | UNEXPECTED | 
+lm_head.decoder.bias        | UNEXPECTED | 
+lm_head.layer_norm.bias     | UNEXPECTED | 
+lm_head.dense.weight        | UNEXPECTED | 
+lm_head.layer_norm.weight   | UNEXPECTED | 
+lm_head.decoder.weight      | UNEXPECTED | 
+lm_head.dense.bias          | UNEXPECTED | 
+roberta.pooler.dense.bias   | UNEXPECTED | 
+roberta.pooler.dense.weight | UNEXPECTED | 
+classifier.out_proj.bias    | MISSING    | 
+classifier.dense.bias       | MISSING    | 
+classifier.out_proj.weight  | MISSING    | 
+classifier.dense.weight     | MISSING    | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+{'epoch': 1, 'train_loss': 0.2991219371736862, 'val_f1': 1.0}
+{'epoch': 2, 'train_loss': 0.008555087667989469, 'val_f1': 1.0}
+{'epoch': 3, 'train_loss': 0.0019466287802526068, 'val_f1': 1.0}
+{'epoch': 4, 'train_loss': 0.0011878268410299418, 'val_f1': 1.0}
+{'Model': 'PhoBERT', 'Feature': 'Tokenizer/Embedding', 'Accuracy': 1.0, 'Precision': 1.0, 'Recall': 1.0, 'F1': 1.0, 'TN': np.int64(74), 'FP': np.int64(0), 'FN': np.int64(0), 'TP': np.int64(59), 'CV_F1': 1.0}

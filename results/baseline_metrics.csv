@@ -1,0 +1,5 @@
+Model,Feature,Accuracy,Precision,Recall,F1,TN,FP,FN,TP,CV_F1
+Naive Bayes,BoW,1.0,1.0,1.0,1.0,74,0,0,59,1.0
+Naive Bayes,TF-IDF,1.0,1.0,1.0,1.0,74,0,0,59,1.0
+SVM,BoW,1.0,1.0,1.0,1.0,74,0,0,59,0.9894666069027341
+SVM,TF-IDF,1.0,1.0,1.0,1.0,74,0,0,59,0.9956521739130434
