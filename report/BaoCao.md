@@ -2,7 +2,7 @@
 
 Nhóm 2 – Môn Xử lý ngôn ngữ tự nhiên, PTIT
 
-> **LƯU Ý QUAN TRỌNG:** Số liệu trong bản này được tính trên **dataset giả lập (synthetic)** do `src/generate_synthetic.py` sinh ra, vì dữ liệu thật từ các group Facebook chưa được thu thập. Các kết quả 100% bên dưới **không phản ánh hiệu năng thực tế**. Khi có dữ liệu thật, thay `data/raw/comments.csv`, chạy lại các script trong README và cập nhật mục 3.
+> **Lưu ý:** dữ liệu `raw_fb.csv` chưa có nhãn; nhãn dùng ở đây là **nhãn yếu** (luật + duyệt tay) chưa được hai người gán độc lập kiểm chứng. Test chỉ có 11 mẫu SPAM nên các kết luận mang tính tham khảo.
 
 ## 1. Giới thiệu về bài toán
 
@@ -30,27 +30,28 @@ Quy tắc gán nhãn (sheet `Dataset_Label`): SPAM là quảng cáo lặp lại,
 
 ## 3. Thực nghiệm và kết quả
 
-**3.1 Dữ liệu.** Dataset giả lập, 762 bình luận sinh ra, còn **664** sau khi loại trùng (SPAM 44,6%). Schema: `id, text, group, timestamp, label, source_url, annotator, review_status`. Chia 80/20 phân tầng (seed 42): train 531, test 133 (74 HAM, 59 SPAM). Dữ liệu sinh từ ~60 mẫu câu nên các câu train/test rất giống nhau (xem hạn chế).
+**3.1 Dữ liệu.** `raw_fb.csv` gồm 2948 dòng (500 bài đăng, 2448 bình luận) từ 7 group/page: confessions.ptit (744), 2k5ptit (569), 584397217391365 (525), 1130813927934700 (416), sinhvienptithn (359), 1542129366737375 (274), ptit.onthi.aptis (61). `<USER>`, `<PHONE>` đã được ẩn danh; `author_hash` là hash. Cột `label` trống nên nhóm gán nhãn bằng luật regex (quảng cáo/chào mời khóa học Aptis, bán key/tài liệu, tuyển dụng của công ty, bài đăng quảng bá dạng page, bình luận lặp ≥3 lần có từ khóa chào mời) cộng danh sách ghi đè sau khi đọc tay các ứng viên. Kết quả: **SPAM 68, HAM 2853, REVIEW 27** (CLB tuyển thành viên, thông báo của trường; loại khỏi huấn luyện). Sau khi bỏ trùng/rỗng còn 2807 mẫu, tỉ lệ SPAM ≈ 2,4%, rất lệch lớp. SPAM tập trung ở các thread về Aptis (nhóm 1130813927934700: 31, ptit.onthi.aptis: 15).
 
-**3.2 Cấu hình.** Vectorizer nằm trong `sklearn.Pipeline` nên chỉ fit trên train (không rò rỉ dữ liệu). Tinh chỉnh bằng GridSearchCV 5-fold, tối ưu F1, chỉ trên tập train: `ngram_range` ∈ {(1,1),(1,2)}, `min_df` ∈ {1,2}, NB `alpha` ∈ {0.1,0.5,1}, SVM `C` ∈ {0.1,1,10}. Tham số tốt nhất ở `results/best_params.csv`. PhoBERT-base: 4 epoch, batch 16, lr 3e-5, max_len 64, chọn epoch theo F1 trên 10% validation tách từ train, chạy CPU.
+**3.2 Chia dữ liệu và cấu hình.** Chia ~80/20 bằng `StratifiedGroupKFold` theo `post_id` để bình luận cùng bài không rơi vào cả train và test: train 2295 (45 SPAM), test 512 (11 SPAM). Vectorizer nằm trong `Pipeline` (chỉ fit trên train). Tinh chỉnh `GridSearchCV` 3-fold theo nhóm, tối ưu F1 lớp SPAM: `ngram_range` ∈ {(1,1),(1,2)}, `min_df` ∈ {1,2}, NB `alpha` ∈ {0.1,0.5,1}, SVM `C` ∈ {0.1,1,10}, SVM dùng `class_weight=balanced`. Tham số chọn được: NB+BoW (α=0,5; min_df=2; unigram), NB+TF-IDF (α=0,1; min_df=2; 1–2-gram), SVM+BoW (C=0,1; min_df=2; 1–2-gram), SVM+TF-IDF (C=1; min_df=1; 1–2-gram). PhoBERT-base: 4 epoch, batch 16, lr 3e-5, max_len 96, loss có trọng số lớp, chọn epoch theo F1 validation, chạy CPU.
 
-**3.3 Kết quả trên tập test (133 mẫu, dữ liệu giả lập).**
+**3.3 Kết quả trên tập test (512 mẫu, SPAM là lớp dương).**
 
-| Mô hình | Đặc trưng | Accuracy | Precision | Recall | F1 | TN | FP | FN | TP | CV-F1 (train) |
+| Mô hình | Đặc trưng | Accuracy | Precision | Recall | F1 | TN | FP | FN | TP | CV-F1 |
 |---|---|---|---|---|---|---|---|---|---|---|
-| Naive Bayes | BoW | 1.000 | 1.000 | 1.000 | 1.000 | 74 | 0 | 0 | 59 | 1.000 |
-| Naive Bayes | TF-IDF | 1.000 | 1.000 | 1.000 | 1.000 | 74 | 0 | 0 | 59 | 1.000 |
-| SVM | BoW | 1.000 | 1.000 | 1.000 | 1.000 | 74 | 0 | 0 | 59 | 0.989 |
-| SVM | TF-IDF | 1.000 | 1.000 | 1.000 | 1.000 | 74 | 0 | 0 | 59 | 0.996 |
-| PhoBERT | Tokenizer/Embedding | 1.000 | 1.000 | 1.000 | 1.000 | 74 | 0 | 0 | 59 | 1.000 (val) |
+| Naive Bayes | BoW | 0.9824 | 0.5714 | 0.7273 | 0.6400 | 495 | 6 | 3 | 8 | 0.718 |
+| Naive Bayes | TF-IDF | 0.9863 | 0.7500 | 0.5455 | 0.6316 | 499 | 2 | 5 | 6 | 0.702 |
+| SVM | BoW | 0.9902 | 1.0000 | 0.5455 | 0.7059 | 501 | 0 | 5 | 6 | 0.722 |
+| SVM | TF-IDF | **0.9922** | 1.0000 | 0.6364 | **0.7778** | 501 | 0 | 4 | 7 | 0.770 |
+| PhoBERT | Tokenizer/Embedding | 0.9824 | 1.0000 | 0.1818 | 0.3077 | 501 | 0 | 9 | 2 | 0.400 (val) |
 
-Confusion matrix: `figures/confusion_baseline.png`, `figures/confusion_phobert.png`. So sánh F1: `figures/f1_baseline.png`. Lịch sử huấn luyện PhoBERT: `results/phobert_history.csv` (train loss 0,299 → 0,001).
+Hình: `figures/confusion_matrices.png`, `figures/compare.png`.
 
-**3.4 Nhận xét và hạn chế.**
-- Cả 5 cấu hình đạt 100% trên test, nên **không thể kết luận** BoW hay TF-IDF, NB hay SVM, truyền thống hay PhoBERT tốt hơn. Nguyên nhân: dữ liệu sinh từ mẫu câu lặp lại, tập test gần như trùng phân phối và nội dung với train; các ca “khó” (spam ngắn không link, ham có link/“ib”) vẫn thuộc cùng mẫu với train.
-- Điểm duy nhất có chút phân biệt là CV-F1 trên train: SVM+BoW 0,989 < SVM+TF-IDF 0,996 < NB 1,000, chênh lệch quá nhỏ để có ý nghĩa.
-- Phân tích lỗi (`results/errors_*.csv`) hiện rỗng vì không có dự đoán sai.
-- Việc cần làm với dữ liệu thật: thu thập ≥ vài nghìn bình luận từ các group trong sheet, gán nhãn theo guideline, hai người gán độc lập một tập mẫu và đo Cohen's kappa, chạy lại pipeline, điền bảng 3.3, phân tích lỗi và thảo luận khác biệt giữa các phương pháp.
+**3.4 Nhận xét.**
+- Accuracy ≥ 98% ở mọi mô hình chỉ vì HAM chiếm ~97,6%; nên đọc F1/Recall của lớp SPAM.
+- **SVM + TF-IDF tốt nhất** (F1 0,778; cũng cao nhất ở CV-F1 0,770), Precision 1,0 (không chặn nhầm). SVM nhìn chung có Precision cao hơn NB; NB (đặc biệt với BoW) có Recall cao hơn nhưng chặn nhầm 2–6 bình luận. TF-IDF nhỉnh hơn BoW với SVM, ngược lại với NB (chênh lệch 1–2 mẫu, không đủ kết luận).
+- **PhoBERT kém nhất (F1 0,31)**: chỉ có ~45 mẫu SPAM để fine-tune nên mô hình nghiêng về HAM, F1 validation chỉ 0,40 sau 4 epoch và vẫn đang tăng. Kết quả này phản ánh dữ liệu ít và cấu hình chạy CPU, không phải PhoBERT kém hơn nói chung; cần thêm dữ liệu SPAM và nhiều epoch hơn (GPU).
+- **Phân tích lỗi** (`errors.csv` trong notebook): lọt spam (FN) thường là spam ngầm (seeding kiểu “Cô … nhiệt tình 1000%…”), bài viết quảng bá nội dung dài như “APTIS WRITING PART 4”, hoặc bình luận rất ngắn “ib mình đang gom aptis nhé”. Một số “chặn nhầm” (FP) của NB thực ra là nội dung quảng bá mà luật gán nhãn đã bỏ sót (ví dụ “Em nhắn chị gửi tài liệu free nha”, “TOP 1 CHỨNG CHỈ SINH VIÊN PTIT…”), cho thấy **nhãn còn nhiễu** và số liệu có thể bị đánh giá thấp.
+- **Hạn chế:** nhãn yếu (mô hình có thể chỉ học lại luật), test chỉ 11 SPAM (1 mẫu đổi F1 ~ vài điểm %), SPAM tập trung ở chủ đề Aptis nên chưa kiểm chứng tổng quát hóa. Cần: hai người gán độc lập một tập mẫu và tính Cohen's kappa, xử lý 27 dòng REVIEW, thu thêm SPAM, dùng cross-validation nhiều fold khi báo cáo.
 
 ## Tài liệu tham khảo
 

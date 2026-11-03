@@ -1,6 +1,7 @@
 __pycache__/
 *.pyc
-models/*.joblib
-models/phobert*/
-nohup.out
+outputs/
+scratch/
+raw_fb*.csv
+data/
 ~$*.xlsx
