@@ -1,0 +1,50 @@
+C:\Users\HAINAM\AppData\Roaming\Python\Python312\site-packages\zmq\_future.py:718: RuntimeWarning: Proactor event loop does not implement add_reader family of methods required for zmq. Registering an additional selector thread for add_reader support via tornado. Use `asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())` to avoid this warning.
+  self._get_loop()
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+WARNING: Ignoring invalid distribution ~umpy (C:\Users\HAINAM\AppData\Roaming\Python\Python312\site-packages)
+WARNING: Ignoring invalid distribution ~umpy (C:\Users\HAINAM\AppData\Roaming\Python\Python312\site-packages)
+WARNING: Ignoring invalid distribution ~umpy (C:\Users\HAINAM\AppData\Roaming\Python\Python312\site-packages)
+
+[notice] A new release of pip is available: 26.0.1 -> 26.3
+[notice] To update, run: python.exe -m pip install --upgrade pip
+Traceback (most recent call last):
+  File "C:\Users\HAINAM\AppData\Roaming\Python\Python312\site-packages\joblib\externals\loky\backend\resource_tracker.py", line 259, in main
+    del registry[rtype][name]
+        ~~~~~~~~~~~~~~~^^^^^^
+KeyError: 'C:\\Users\\HAINAM\\AppData\\Local\\Temp\\joblib_memmapping_folder_18128_39ceb53ba4564215bd21a9c0625c680a_57302df8258a4f789a1e23aec0d5faa8'
+Traceback (most recent call last):
+  File "C:\Users\HAINAM\AppData\Roaming\Python\Python312\site-packages\joblib\externals\loky\backend\resource_tracker.py", line 259, in main
+    del registry[rtype][name]
+        ~~~~~~~~~~~~~~~^^^^^^
+KeyError: 'C:\\Users\\HAINAM\\AppData\\Local\\Temp\\joblib_memmapping_folder_18128_3a6b58400ab549fc91b583cecfc7c66c_14dad012f5f64084aabf81fa58b3aa73'
+Traceback (most recent call last):
+  File "C:\Users\HAINAM\AppData\Roaming\Python\Python312\site-packages\joblib\externals\loky\backend\resource_tracker.py", line 259, in main
+    del registry[rtype][name]
+        ~~~~~~~~~~~~~~~^^^^^^
+KeyError: 'C:\\Users\\HAINAM\\AppData\\Local\\Temp\\joblib_memmapping_folder_18128_39ceb53ba4564215bd21a9c0625c680a_a6caf41ea175499dadd19c5355f58ef9'
+Traceback (most recent call last):
+  File "C:\Users\HAINAM\AppData\Roaming\Python\Python312\site-packages\joblib\externals\loky\backend\resource_tracker.py", line 259, in main
+    del registry[rtype][name]
+        ~~~~~~~~~~~~~~~^^^^^^
+KeyError: 'C:\\Users\\HAINAM\\AppData\\Local\\Temp\\joblib_memmapping_folder_18128_3cc41f5f87ee4955a6d6769159d822f7_3b557d5fe78643d6a02c16df61218138'
+Traceback (most recent call last):
+  File "C:\Users\HAINAM\AppData\Roaming\Python\Python312\site-packages\joblib\externals\loky\backend\resource_tracker.py", line 259, in main
+    del registry[rtype][name]
+        ~~~~~~~~~~~~~~~^^^^^^
+KeyError: 'C:\\Users\\HAINAM\\AppData\\Local\\Temp\\joblib_memmapping_folder_18128_39ceb53ba4564215bd21a9c0625c680a_14e15ab3868b44f688a5421b9571fb9d'
+Traceback (most recent call last):
+  File "C:\Users\HAINAM\AppData\Roaming\Python\Python312\site-packages\joblib\externals\loky\backend\resource_tracker.py", line 259, in main
+    del registry[rtype][name]
+        ~~~~~~~~~~~~~~~^^^^^^
+KeyError: 'C:\\Users\\HAINAM\\AppData\\Local\\Temp\\joblib_memmapping_folder_18128_533f50afcf39438181c03e7a1e4410fa_918252d7f7984204830a84e9072f374c'
+Traceback (most recent call last):
+  File "C:\Users\HAINAM\AppData\Roaming\Python\Python312\site-packages\joblib\externals\loky\backend\resource_tracker.py", line 259, in main
+    del registry[rtype][name]
+        ~~~~~~~~~~~~~~~^^^^^^
+KeyError: 'C:\\Users\\HAINAM\\AppData\\Local\\Temp\\joblib_memmapping_folder_18128_39ceb53ba4564215bd21a9c0625c680a_60b7c4b3d306457aaf920601f14bc454'
+Traceback (most recent call last):
+  File "C:\Users\HAINAM\AppData\Roaming\Python\Python312\site-packages\joblib\externals\loky\backend\resource_tracker.py", line 259, in main
+    del registry[rtype][name]
+        ~~~~~~~~~~~~~~~^^^^^^
+KeyError: 'C:\\Users\\HAINAM\\AppData\\Local\\Temp\\joblib_memmapping_folder_18128_39ceb53ba4564215bd21a9c0625c680a_a9b720ad2008493a894cc62de04b70c8'
+DONE
